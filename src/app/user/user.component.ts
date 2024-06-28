@@ -1,8 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
-
-import { DUMMY_USERS } from '../dummy-users';
-
-const randomUserIndex = Math.floor(Math.random() * DUMMY_USERS.length);
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-user',
@@ -12,18 +8,12 @@ const randomUserIndex = Math.floor(Math.random() * DUMMY_USERS.length);
   styleUrl: './user.component.css',
 })
 export class UserComponent {
-  // initialize a signal
-  selectedUser = signal(DUMMY_USERS[randomUserIndex]);
+  // ! means that the avatar value will be set although typescript doesn't see it
+  @Input({ required: true }) avatar!: string;
+  @Input({ required: true }) name!: string;
 
-  // computed also creates a signal
-  //    the reason why we need computed here is because imagePath should change
-  //    when the value of selectUser(which is a signal) change, by using computed
-  //    Angular sets up the subscription and change the UI for you
-  imagePath = computed(() => 'assets/users/' + this.selectedUser().avatar);
-
-  onSelectUser() {
-    const newUserIndex = Math.floor(Math.random() * DUMMY_USERS.length);
-    // update a signal
-    this.selectedUser.set(DUMMY_USERS[newUserIndex]);
+  get imagePath() {
+    return 'assets/users/' + this.avatar;
   }
+  onSelectUser() {}
 }
